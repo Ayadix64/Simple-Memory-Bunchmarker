@@ -7,10 +7,15 @@ typedef long u64;
 
 u64 alloctest(u64 chuncksize){
 	printf("Alocating %d MB\n",chuncksize/(1024*1024));
-	u64 start = clock();
+	struct timespec befaure;
+	clock_gettime(0,&befaure);
 	void * mem = malloc(chuncksize);
 	free(mem);
-	return clock() - start;
+	struct timespec after;
+	clock_gettime(0,&after);
+
+
+	return after.tv_nsec - befaure.tv_nsec;
 }
 
 
@@ -18,18 +23,22 @@ u64 memsettest(u64 chuncksize){
 	printf("memset %d MB\n",chuncksize/(1024*1024));
 	void * mem = malloc(chuncksize);
 	
-	u64 start = clock();
-	
+	struct timespec befaure;
+	clock_gettime(0,&befaure);
+
+		
 	memset(mem,0,(size_t)chuncksize);
 	
-	u64 ret = clock() -start;
+	struct timespec after;
+	clock_gettime(0,&after);
+
 	free(mem);
-	return ret;
+	return after.tv_nsec - befaure.tv_nsec;
 }
 
 #define TEST(func,size) alloctestsize = size;\
 	allocres =  func(alloctestsize);\
-	printf(#func" der %d µs (%ld MB/s)\n",(allocres * 1000000 )/CLOCKS_PER_SEC,(u64)((float)alloctestsize/(float)((float)allocres/(float)CLOCKS_PER_SEC))/(1024*1024));
+	printf(#func" der %d µs (%ld MB/s)\n",(allocres * 1000000 )/1000000000,(u64)((float)alloctestsize/(float)((float)allocres/(float)1000000000))/(1024*1024));
 
 
 
