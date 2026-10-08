@@ -1,7 +1,7 @@
 # A Simple Memory Bunchlarking utility
 becuse, again whay not?
 
-this program will test the memory allocater / memseter of the system / oprting system
+this program will test the memory allocater of the libc library / kernel / machine
 
 to build and start bunchmarking , just do:
 
